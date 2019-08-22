@@ -7,16 +7,16 @@ import errorHandler = require('errorhandler');
 import methodOverride = require('method-override');
 import * as http from 'http';
 import * as cors from 'cors';
-import questionRoute from './question/controller';
+import { QuestionController } from './question/controller';
 import { Server } from 'http';
 import { URL } from 'url';
 
 let debug = require('debug')();
 
 const corsOptions = {
-    origin: 'http://localhost:4200',
+    origin: '*',
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-  }
+}
 /**
  * The app.
  *
@@ -114,7 +114,7 @@ export class App {
             err.status = 404;
             next(err);
         });
-        this.expressApp.use(questionRoute);
+        this.expressApp.use(new QuestionController().createRouter());
 
         //error handling
         this.expressApp.use(errorHandler());
